@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SchemeLaunchPad</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="rename">Rename</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
+    <string name="x_percent">%d%</string>
+</resources>
