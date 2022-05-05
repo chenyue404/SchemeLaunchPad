@@ -3,12 +3,10 @@ package com.cy.schemelaunchpad
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.TextView
-import androidx.constraintlayout.widget.Group
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.cy.fixtableview.FixTableView
 
 /**
@@ -18,19 +16,15 @@ class MainActivity : Activity() {
 
     private val btName: Button by lazy { findViewById(R.id.btName) }
     private val ibEdit: ImageButton by lazy { findViewById(R.id.ibEdit) }
-    private val tvSpaceVertical: TextView by lazy { findViewById(R.id.tvSpaceVertical) }
-    private val sbVertical: SeekBar by lazy { findViewById(R.id.sbVertical) }
-    private val tvSpaceHorizontal: TextView by lazy { findViewById(R.id.tvSpaceHorizontal) }
-    private val sbHorizontal: SeekBar by lazy { findViewById(R.id.sbHorizontal) }
-    private val ibHorizontalAdd: ImageButton by lazy { findViewById(R.id.ibHorizontalAdd) }
-    private val ibHorizontalDelete: ImageButton by lazy { findViewById(R.id.ibHorizontalDelete) }
-    private val ibVerticalAdd: ImageButton by lazy { findViewById(R.id.ibVerticalAdd) }
-    private val ibVerticalDelete: ImageButton by lazy { findViewById(R.id.ibVerticalDelete) }
-    private val gpEditLayout: Group by lazy { findViewById(R.id.gpEditLayout) }
+    private val ibTable: ImageButton by lazy { findViewById(R.id.ibTable) }
+    private val ibSetting: ImageButton by lazy { findViewById(R.id.ibSetting) }
     private val ftvList: FixTableView by lazy { findViewById(R.id.ftvList) }
+
+    private val tableConfigDialog: TableConfigDialog by lazy { TableConfigDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main)
 
         ftvList.apply {
@@ -43,28 +37,18 @@ class MainActivity : Activity() {
                     (this as Button).text = "$column, $row"
                 }
             }
-            columnSize = 1
-            rowSize = 1
+            updateTable(1, 1)
         }
         ibEdit.click {
-            gpEditLayout.visibility =
-                if (gpEditLayout.visibility == View.VISIBLE) {
-                    View.GONE
-                } else {
-                    View.VISIBLE
-                }
+            tableConfigDialog.show()
         }
-        ibHorizontalAdd.click {
-            ftvList.columnSize += 1
-        }
-        ibHorizontalDelete.click {
-            ftvList.columnSize -= 1
-        }
-        ibVerticalAdd.click {
-            ftvList.rowSize += 1
-        }
-        ibVerticalDelete.click {
-            ftvList.rowSize -= 1
+        tableConfigDialog.onSaveListener = {
+            ftvList.updateTable(it.columnSize, it.rowSize)
+            (ftvList.layoutParams as ConstraintLayout.LayoutParams).apply {
+                matchConstraintPercentWidth = it.width * 0.01f
+                matchConstraintPercentHeight = it.height * 0.01f
+            }
         }
     }
+
 }

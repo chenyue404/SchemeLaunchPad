@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="false"
+    android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
@@ -19,7 +19,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="start|center_vertical"
-        android:paddingEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@id/glTop"
         app:layout_constraintEnd_toStartOf="@id/ibEdit"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,108 +30,48 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/edit"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@drawable/ic_edit"
+        android:tooltipText="@string/edit"
+        app:layout_constraintBottom_toBottomOf="@id/glTop"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@id/ibTable"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibTable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/table_config"
+        android:src="@drawable/ic_apps"
+        android:tooltipText="@string/table_config"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/glTop"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@id/ibSetting"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/ibSetting"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/ic_settings"
+        android:tooltipText="@string/settings"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/glTop"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSpaceVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/x_percent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/glTop" />
-
-    <SeekBar
-        android:id="@+id/sbVertical"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tvSpaceVertical"
-        app:layout_constraintEnd_toStartOf="@id/tvSpaceVertical"
-        app:layout_constraintStart_toEndOf="@id/brSpaceHorizontal"
-        app:layout_constraintTop_toTopOf="@id/tvSpaceVertical" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/brSpaceVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="sbVertical,tvSpaceVertical" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/brSpaceHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="end"
-        app:constraint_referenced_ids="sbHorizontal,tvSpaceHorizontal" />
-
-    <TextView
-        android:id="@+id/tvSpaceHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/x_percent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/sbHorizontal"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.cy.schemelaunchpad.VerticalSeekBar
-        android:id="@+id/sbHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tvSpaceHorizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/tvSpaceHorizontal"
-        app:layout_constraintTop_toBottomOf="@id/brSpaceVertical" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <com.cy.fixtableview.FixTableView
         android:id="@+id/ftvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/ibVerticalAdd"
-        app:layout_constraintEnd_toStartOf="@id/ibHorizontalAdd"
-        app:layout_constraintStart_toStartOf="@id/brSpaceHorizontal"
-        app:layout_constraintTop_toTopOf="@id/brSpaceVertical" />
-
-    <ImageButton
-        android:id="@+id/ibHorizontalAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/brSpaceVertical" />
-
-    <ImageButton
-        android:id="@+id/ibHorizontalDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_remove"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ibHorizontalAdd" />
-
-    <ImageButton
-        android:id="@+id/ibVerticalAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/brSpaceHorizontal" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/glTop" />
 
-    <ImageButton
-        android:id="@+id/ibVerticalDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_remove"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ibVerticalAdd" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/gpEditLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="sbVertical,sbHorizontal,tvSpaceHorizontal,tvSpaceVertical,ibHorizontalAdd,ibHorizontalDelete,ibVerticalAdd,ibVerticalDelete"
-        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,17 +13,9 @@ class FixTableView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
     var rowSize = 0
-        set(value) {
-            if (value < 1 || value == field) return
-            field = value
-            updateColumn()
-        }
+        private set
     var columnSize = 0
-        set(value) {
-            if (value < 1 || value == field) return
-            field = value
-            updateColumn()
-        }
+        private set
 
     private val childList: MutableList<MutableList<View>> = mutableListOf()
 
@@ -35,7 +27,10 @@ class FixTableView @JvmOverloads constructor(
         View(context)
     }
 
-    private fun updateColumn() {
+    fun updateTable(newColumn: Int, newRow: Int) {
+        if (columnSize == newColumn && rowSize == newRow) return
+        columnSize = newColumn
+        rowSize = newRow
         for (column in 0 until columnSize) {
             // 去除多余的行
             while (column < childList.size && rowSize < childList[column].size) {
