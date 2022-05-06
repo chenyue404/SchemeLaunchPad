@@ -43,9 +43,6 @@ class TableConfigDialog(private val mContext: Context) {
             dialog.cancel()
         }
         .create()
-        .apply {
-            setCanceledOnTouchOutside(false)
-        }
 
     init {
         sbColumnSize.setOnChangeListener {

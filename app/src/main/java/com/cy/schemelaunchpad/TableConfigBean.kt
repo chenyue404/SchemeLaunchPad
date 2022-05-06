@@ -20,6 +20,6 @@ class ItemConfigBean(
 
 class ConfigBean(
     var name: String,
-    var tableConfig: TableConfigBean,
-    var list: List<ItemConfigBean>,
+    var tableConfig: TableConfigBean = TableConfigBean(),
+    var list: List<ItemConfigBean> = listOf(),
 )
