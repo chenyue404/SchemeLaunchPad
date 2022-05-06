@@ -17,11 +17,9 @@ class FixTableView @JvmOverloads constructor(
     var columnSize = 0
         private set
 
-    private val childList: MutableList<MutableList<View>> = mutableListOf()
+    private val _childList: MutableList<MutableList<View>> = mutableListOf()
 
-    init {
-
-    }
+    var childList: List<List<View>> = _childList
 
     var getNewChild: (column: Int, row: Int) -> View = { _, _ ->
         View(context)
@@ -33,34 +31,34 @@ class FixTableView @JvmOverloads constructor(
         rowSize = newRow
         for (column in 0 until columnSize) {
             // 去除多余的行
-            while (column < childList.size && rowSize < childList[column].size) {
-                val lastView = childList[column].last()
-                childList[column].remove(lastView)
+            while (column < _childList.size && rowSize < _childList[column].size) {
+                val lastView = _childList[column].last()
+                _childList[column].remove(lastView)
                 removeView(lastView)
             }
 
             // 增加缺少的元素
             for (row in 0 until rowSize) {
-                if (childList.getOrNull(column) == null) {
-                    childList.add(mutableListOf())
+                if (_childList.getOrNull(column) == null) {
+                    _childList.add(mutableListOf())
                 }
-                if (childList[column].getOrNull(row) == null) {
+                if (_childList[column].getOrNull(row) == null) {
                     val newView = getNewChild(column, row).apply {
                         layoutParams = LayoutParams(0, 0)
                         id = generateViewId()
                     }
-                    childList[column].add(newView)
+                    _childList[column].add(newView)
                     addView(newView)
                 }
             }
         }
 
         // 去除多余的列
-        if (columnSize < childList.size) {
-            for (column in columnSize until childList.size) {
-                while (childList[column].isNotEmpty()) {
-                    childList[column].last().let {
-                        childList[column].remove(it)
+        if (columnSize < _childList.size) {
+            for (column in columnSize until _childList.size) {
+                while (_childList[column].isNotEmpty()) {
+                    _childList[column].last().let {
+                        _childList[column].remove(it)
                         removeView(it)
                     }
                 }
@@ -72,7 +70,7 @@ class FixTableView @JvmOverloads constructor(
         }
         for (column in 0 until columnSize) {
             for (row in 0 until rowSize) {
-                val thisViewId = childList[column][row].id
+                val thisViewId = _childList[column][row].id
                 constraintSet.apply {
                     clear(thisViewId)
 
@@ -88,7 +86,7 @@ class FixTableView @JvmOverloads constructor(
                         connect(
                             thisViewId,
                             ConstraintSet.TOP,
-                            childList[0][row - 1].id,
+                            _childList[0][row - 1].id,
                             ConstraintSet.BOTTOM
                         )
                     }
@@ -105,7 +103,7 @@ class FixTableView @JvmOverloads constructor(
                         connect(
                             thisViewId,
                             ConstraintSet.START,
-                            childList[column - 1][0].id,
+                            _childList[column - 1][0].id,
                             ConstraintSet.END
                         )
                     }
@@ -122,7 +120,7 @@ class FixTableView @JvmOverloads constructor(
                         connect(
                             thisViewId,
                             ConstraintSet.BOTTOM,
-                            childList[0][row + 1].id,
+                            _childList[0][row + 1].id,
                             ConstraintSet.TOP
                         )
                     }
@@ -139,7 +137,7 @@ class FixTableView @JvmOverloads constructor(
                         connect(
                             thisViewId,
                             ConstraintSet.END,
-                            childList[column + 1][0].id,
+                            _childList[column + 1][0].id,
                             ConstraintSet.START
                         )
                     }

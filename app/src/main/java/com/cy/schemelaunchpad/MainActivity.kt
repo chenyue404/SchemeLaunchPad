@@ -1,6 +1,7 @@
 package com.cy.schemelaunchpad
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -11,6 +12,8 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import com.cy.fixtableview.FixTableView
@@ -37,9 +40,8 @@ class MainActivity : Activity() {
     private val ftvList: FixTableView by lazy { findViewById(R.id.ftvList) }
 
     private val tableConfigDialog: TableConfigDialog by lazy { TableConfigDialog(this) }
-    private val sp by lazy {
-        getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-    }
+    private val editItemDialog: EditItemDialog by lazy { EditItemDialog(this) }
+    private val sp by lazy { getSharedPreferences(SP_NAME, Context.MODE_PRIVATE) }
 
     private var allConfigMap: HashMap<String, ConfigBean> = hashMapOf()
     private var currentConfigName = ""
@@ -76,6 +78,7 @@ class MainActivity : Activity() {
                     else R.string.edit
                 )
             }
+            switchItemStatus(isEditMode)
         }
         ibTable.click {
             tableConfigDialog.show(currentConfig?.tableConfig)
@@ -83,6 +86,9 @@ class MainActivity : Activity() {
         tableConfigDialog.onSaveListener = {
             currentConfig?.tableConfig = it
             updateView()
+        }
+        editItemDialog.onSaveListener = { column, row, itemConfigBean ->
+            currentConfig?.itemMap?.put(getItemConfigKey(column, row), itemConfigBean)
         }
         updateView()
     }
@@ -97,7 +103,7 @@ class MainActivity : Activity() {
 
     private fun updateView() {
         val tableConfig = currentConfig?.tableConfig ?: return
-        val itemList = currentConfig?.list
+        val itemMap = currentConfig?.itemMap
         btName.text = currentConfigName
 
         ftvList.getNewChild = { column, row ->
@@ -106,19 +112,26 @@ class MainActivity : Activity() {
                 ftvList,
                 false
             ).apply {
-                val item = itemList?.find { it.column == column && it.row == row }
-                (this as Button).apply {
-                    text = item?.text ?: "$column, $row"
-                    item?.clickStr?.let { command ->
-                        setOnClickListener { launchActivity(command) }
-                    }
-                    item?.longClickStr?.let { command ->
-                        setOnLongClickListener {
-                            launchActivity(command)
-                            true
-                        }
+                val item = itemMap?.get(getItemConfigKey(column, row)) ?: ItemConfigBean()
+                getBtn().text = item.text
+                item.clickStr.let { command ->
+                    getBtn().click { launchActivity(command) }
+                }
+                item.longClickStr.let { command ->
+                    getBtn().setOnLongClickListener {
+                        launchActivity(command)
+                        true
                     }
                 }
+                getTv().click {
+                    editItemDialog.show(column, row, item)
+                }
+                getTv().visibility =
+                    if (isEditMode) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
             }
         }
         ftvList.updateTable(tableConfig.columnSize, tableConfig.rowSize)
@@ -153,7 +166,7 @@ class MainActivity : Activity() {
             }
 
         if (allConfigMap.isEmpty()) {
-            val configBean = ConfigBean(DEFAULT_CONFIG_NAME)
+            val configBean = ConfigBean()
             allConfigMap[DEFAULT_CONFIG_NAME] = configBean
             currentConfig = configBean
             saveCurrent()
@@ -163,10 +176,28 @@ class MainActivity : Activity() {
     }
 
     private fun launchActivity(command: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, command.toUri()))
+        if (command.isEmpty()) return
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, command.toUri()))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, getString(R.string.tip_no_activity), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun log(str: String) {
         Log.d(localClassName, str)
     }
+
+    private fun switchItemStatus(editMode: Boolean) {
+        ftvList.childList.forEachIndexed { columnIndex, list ->
+            list.forEachIndexed { rowIndex, view ->
+                view.getTv().visibility =
+                    if (editMode) View.VISIBLE
+                    else View.GONE
+            }
+        }
+    }
+
+    private fun View.getBtn() = findViewById<Button>(R.id.btTitle)
+    private fun View.getTv() = findViewById<TextView>(R.id.tvEdit)
 }

@@ -17,6 +17,7 @@
     <Button
         android:id="@+id/btName"
         android:layout_width="0dp"
+        android:textAllCaps="false"
         android:layout_height="0dp"
         android:gravity="start|center_vertical"
         app:layout_constraintBottom_toBottomOf="@id/glTop"

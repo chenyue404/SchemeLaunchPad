@@ -16,4 +16,9 @@
     <string name="height">Height</string>
     <string name="column">Column</string>
     <string name="row">Row</string>
+    <string name="title">Title</string>
+    <string name="click_command">Click command</string>
+    <string name="long_click_command">Long click Command</string>
+    <string name="tip_no_activity">No Activity found</string>
+    <string name="tip_add_command_first">Add command first</string>
 </resources>

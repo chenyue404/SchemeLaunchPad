@@ -11,15 +11,14 @@ class TableConfigBean(
 )
 
 class ItemConfigBean(
-    var column: Int,
-    var row: Int,
-    var text: String?,
-    var clickStr: String?,
-    var longClickStr: String?,
+    var text: String = "",
+    var clickStr: String = "",
+    var longClickStr: String = "",
 )
 
 class ConfigBean(
-    var name: String,
     var tableConfig: TableConfigBean = TableConfigBean(),
-    var list: List<ItemConfigBean> = listOf(),
+    var itemMap: HashMap<String, ItemConfigBean> = hashMapOf()
 )
+
+fun getItemConfigKey(column: Int, row: Int) = "$column,$row"
