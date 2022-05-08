@@ -21,4 +21,6 @@
     <string name="long_click_command">Long click Command</string>
     <string name="tip_no_activity">No Activity found</string>
     <string name="tip_add_command_first">Add command first</string>
+    <string name="choose_config">Choose Config</string>
+    <string name="name_already_exits">Name already exits</string>
 </resources>
