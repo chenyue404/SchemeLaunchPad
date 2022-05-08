@@ -146,6 +146,7 @@ class MainActivity : Activity() {
             currentConfigName = it
         } ?: kotlin.run {
             sp.edit().putString(SP_KEY_CURRENT, DEFAULT_CONFIG_NAME).apply()
+            currentConfigName = DEFAULT_CONFIG_NAME
         }
 
         (sp.getString(SP_KEY_CONFIG, "") ?: "")
@@ -169,10 +170,11 @@ class MainActivity : Activity() {
             val configBean = ConfigBean()
             allConfigMap[DEFAULT_CONFIG_NAME] = configBean
             currentConfig = configBean
-            saveCurrent()
         } else {
+            allConfigMap.remove("")
             currentConfig = allConfigMap[currentConfigName]
         }
+        saveCurrent()
     }
 
     private fun launchActivity(command: String) {
